@@ -30,7 +30,7 @@ let messages = [];
 
 app.get("/", function(req, res) {
   if (req.session.username) {
-    res.redirect("/user");
+    res.redirect("/login");
   } else {
     res.render("index");
   }
@@ -47,13 +47,19 @@ app.post("/login", function(req, res) {
   users.forEach(function(user){
     if (user.username === req.body.username) {
       loggedUser = user;
-    }
+    };
   });
+
+  if (loggedUser === undefined) {
+      loggedUser = {}
+      }
+  
 
   req.checkBody("username", "Please Enter a valid username.").notEmpty().isLength({min: 3, max: 20});
   req.checkBody("password", "Please Enter a Password.").notEmpty();
-
-  let errors = req.validationErrors();
+  req.checkBody("password", "Invalid password and username combination").equals(loggedUser.password);
+ 
+const errors = req.validationErrors();
 
   if (errors) {
     errors.forEach(function(error) {

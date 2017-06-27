@@ -30,9 +30,9 @@ let messages = [];
 
 app.get("/", function(req, res) {
   if (req.session.username) {
-    res.redirect("/login");
+  res.render("user", {username: req.session.username});
   } else {
-    res.render("index");
+    res.render("login");
   }
 });
 
@@ -70,14 +70,8 @@ const errors = req.validationErrors();
 
     req.session.username = req.body.username;
 
-    res.redirect("/user");
+    res.redirect("/");
   }
-
-  res.redirect("/user");
-});
-
-app.get("/user", function(req, res) {
-  res.render("user", {username: req.session.username});
 });
 
 app.listen(3000, function() {
